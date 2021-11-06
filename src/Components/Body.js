@@ -56,7 +56,6 @@ class Body extends React.Component {
     addImage(event) {
         event.preventDefault();
 
-        console.log(this.state.list);
         const newItem = {
             title: 'New item #' + this.state.list.length,
             url: 'https://pbs.twimg.com/profile_images/954421639873167360/jGyozaLe_400x400.jpg',
