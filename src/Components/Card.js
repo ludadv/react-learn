@@ -4,7 +4,8 @@ class Card extends React.Component {
     render() {
         return (
             <div className="card">
-                { this.props.title && <div class="card-title">{this.props.title}</div> }
+                <div className="card-btn" onClick={event => this.props.onClose(event)}>&#10006;</div>
+                { this.props.title && <div className="card-title">{this.props.title}</div> }
                 { this.props.src && <img src={this.props.src} alt=""/> }
             </div>
         )
@@ -12,3 +13,13 @@ class Card extends React.Component {
 }
 
 export default Card;
+
+
+// const onClose = function (event) {
+//     console.log('REMOVE');
+// }
+
+// const onClose = (event) => console.log('REMOVE');
+
+
+// onClose();

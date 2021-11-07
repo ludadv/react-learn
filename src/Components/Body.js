@@ -34,17 +34,18 @@ class Body extends React.Component {
     render() {
         return (
             <div className='body'>
-                <div class="cards">
+                <div className="cards">
                     <button onClick={ event => this.addImage(event) }>Add image</button>
-                    <button>Clear images</button>
+                    <button onClick={ event => this.clearImages(event) }>Clear images</button>
                 </div>
-                <div class="cards">
+                <div className="cards">
                     { this.state.list.map(
                         (item, index) =>
                             <Card
                                 title={item.title}
                                 src={item.url}
                                 key={index}
+                                onClose={() => this.removeImage(index)}
                             />
                         )
                     }
@@ -63,6 +64,23 @@ class Body extends React.Component {
         this.setState({
             list: this.state.list.concat(newItem),
         });
+    }
+
+    clearImages(event) {
+        event.preventDefault();
+
+        this.setState( {
+            list: [],
+        })
+
+    }
+
+    removeImage(index) {
+        this.setState({
+            list : this.state.list.filter(
+                (item, idx) => index !== idx
+            )
+        })
     }
 }
 
