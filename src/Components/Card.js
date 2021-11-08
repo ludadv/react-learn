@@ -13,13 +13,3 @@ class Card extends React.Component {
 }
 
 export default Card;
-
-
-// const onClose = function (event) {
-//     console.log('REMOVE');
-// }
-
-// const onClose = (event) => console.log('REMOVE');
-
-
-// onClose();
