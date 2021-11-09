@@ -1,8 +1,20 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import HomePage from "./HomePage";
-import ContactPage from "./ContactPage";
-import Card from "../Components/Card";
+import HomePage from "../HomePage";
+import ContactPage from "../ContactPage";
+import Card from "../../Components/Card";
+
+import {makeStyles} from '@mui/styles';
+import {Button, ButtonGroup} from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+
+const useStyles = makeStyles(({
+    button: {
+        color: "white",
+        background: "black",
+    }
+}))
 
 class ImageListPage extends React.Component {
     constructor(props) {
@@ -41,10 +53,23 @@ class ImageListPage extends React.Component {
                     <Route path='/image-list' element={<ImageListPage/>}/>
                     <Route path='/contacts' element={<ContactPage/>}/>
                 </Routes>
-                <div className="cards">
-                    <button onClick={event => this.addImage(event)}>Add image</button>
-                    <button onClick={event => this.clearImages(event)}>Clear images</button>
-                </div>
+                <ButtonGroup>
+                    <Button onClick={event => this.addImage(event)}
+                        size="large"
+                        startIcon={<AddCircleIcon/>}
+                        className="add-item-button"
+                    >
+                        Add image
+                    </Button>
+                    <Button onClick={event => this.clearImages(event)}
+                        color=""
+                        size="large"
+                        startIcon={<RemoveCircleIcon/>}
+                        className="clear-items-button"
+                    >
+                        Clear images
+                    </Button>
+                </ButtonGroup>
                 <div className="cards">
                     {this.state.list.map(
                         (item, index) =>
