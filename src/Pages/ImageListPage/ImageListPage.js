@@ -1,5 +1,5 @@
 import React from "react";
-import Cards from "../../Components/Card";
+import Cards from "../../Components/Cards";
 
 
 import {Button, ButtonGroup, Grid, Typography} from "@mui/material";
@@ -65,7 +65,7 @@ class ImageListPage extends React.Component {
                         (item, index) =>
                             <Cards
                                 title={item.title}
-                                src={item.url}
+                                 src={item.url}
                                 key={index}
                                 onClose={() => this.removeImage(index)}
                             />
