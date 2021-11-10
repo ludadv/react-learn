@@ -16,7 +16,7 @@ class Body extends React.Component {
                     <Routes>
                         <Route path='/' element={<HomePage />} />
                         <Route path='/image-list' element={<ImageListPage />} />
-                        <Route path='/contacts' element={<ContactPage />} />
+                        <Route path='/contact' element={<ContactPage />} />
                     </Routes>
                 </div>
             </Container>

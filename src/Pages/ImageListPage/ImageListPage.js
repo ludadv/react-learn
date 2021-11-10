@@ -1,20 +1,11 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
-import HomePage from "../HomePage";
-import ContactPage from "../ContactPage";
-import Card from "../../Components/Card";
+import Cards from "../../Components/Card";
 
-import {makeStyles} from '@mui/styles';
-import {Button, ButtonGroup} from "@mui/material";
+
+import {Button, ButtonGroup, Grid, Typography} from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
-const useStyles = makeStyles(({
-    button: {
-        color: "white",
-        background: "black",
-    }
-}))
 
 class ImageListPage extends React.Component {
     constructor(props) {
@@ -23,23 +14,19 @@ class ImageListPage extends React.Component {
             list: [
                 {
                     title: "Title1",
-                    url: "https://images.unsplash.com/photo-1635959565667-aeb00a4297ba?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8NnNNVmpUTFNrZVF8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                    url: "https://images.unsplash.com/photo-1636309311589-68e0d689fc07?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfDZzTVZqVExTa2VRfHxlbnwwfHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
                 },
                 {
                     title: "Title2",
-                    url: "https://images.unsplash.com/photo-1635752019785-6637044adea9?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8NnNNVmpUTFNrZVF8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                    url: "https://images.unsplash.com/photo-1636192677130-83a4cbd0f7d3?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDE2fDZzTVZqVExTa2VRfHxlbnwwfHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
                 },
                 {
                     title: "Title3",
-                    url: "https://images.unsplash.com/photo-1635924010446-c2a9851859af?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDExfDZzTVZqVExTa2VRfHxlbnwwfHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                    url: "https://images.unsplash.com/photo-1636280794391-c024c9688e10?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDE0fDZzTVZqVExTa2VRfHxlbnwwfHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
                 },
                 {
-                    title: "",
-                    url: "https://images.unsplash.com/photo-1635746863748-ae514d7f8e87?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDd8NnNNVmpUTFNrZVF8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                },
-                {
-                    title: "Title5",
-                    url: "",
+                    title: "Title4",
+                    url: "https://images.unsplash.com/photo-1636048710788-af2d99a8f05c?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI5fDZzTVZqVExTa2VRfHxlbnwwfHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
                 },
             ]
         };
@@ -48,12 +35,15 @@ class ImageListPage extends React.Component {
     render() {
         return (
             <div className="image-list-page">
-                <Routes>
-                    <Route path='/' element={<HomePage/>}/>
-                    <Route path='/image-list' element={<ImageListPage/>}/>
-                    <Route path='/contacts' element={<ContactPage/>}/>
-                </Routes>
-                <ButtonGroup>
+                <Typography
+                    variant="h3"
+                    component="div"
+                    align="center"
+                    gutterBottom sx={{my: 3}}
+                >
+                    Images list
+                </Typography>
+                <ButtonGroup align="center">
                     <Button onClick={event => this.addImage(event)}
                         size="large"
                         startIcon={<AddCircleIcon/>}
@@ -70,10 +60,10 @@ class ImageListPage extends React.Component {
                         Clear images
                     </Button>
                 </ButtonGroup>
-                <div className="cards">
+                <Grid container spacing={2} sx={{mt: 2}}>
                     {this.state.list.map(
                         (item, index) =>
-                            <Card
+                            <Cards
                                 title={item.title}
                                 src={item.url}
                                 key={index}
@@ -81,7 +71,7 @@ class ImageListPage extends React.Component {
                             />
                     )
                     }
-                </div>
+                </Grid>
             </div>
         );
     }

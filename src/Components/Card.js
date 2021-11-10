@@ -1,15 +1,16 @@
 import React from 'react';
+import {Grid} from "@mui/material";
 
-class Card extends React.Component {
+class Cards extends React.Component {
     render() {
         return (
-            <div className="card">
+            <Grid  item xs={12} sm={6}>
                 <div className="card-btn" onClick={event => this.props.onClose(event)}>&#10006;</div>
                 { this.props.title && <div className="card-title">{this.props.title}</div> }
-                { this.props.src && <img src={this.props.src} alt=""/> }
-            </div>
+                { this.props.src && <img src={this.props.src} alt="" loading="lazy"/> }
+            </Grid>
         )
     }
 }
 
-export default Card;
+export default Cards;

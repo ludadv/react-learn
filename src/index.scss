@@ -1,3 +1,6 @@
+@import "Components/Header/HeaderStyles";
+
+
 .app {
     display: flex;
     flex-direction: column;
@@ -9,31 +12,38 @@
     .footer {
         width: 100%;
         height: 100px;
-        background-color: #5f9ea0;
+        //background-color: #5f9ea0;
 
         text-align: center;
 
-        .header-menu-item {
-            margin-right: 10px;
-        }
+        //.header-menu-item {
+        //    margin-right: 10px;
+        //}
     }
 
     .body {
         width: 100%;
         .image-list-page {
+            text-align: center;
             @import "Pages/ImageListPage/ImageListPage.scss";
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
     }
 
     .cards {
-        flex: 1 1 auto;
-        padding: 20px 0;
-        background-color: #fff;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
+        //flex: 1 1 auto;
+        //padding: 20px 0;
+        //background-color: #fff;
+        //display: flex;
+        //flex-direction: row;
+        //flex-wrap: wrap;
+        //align-items: center;
+        //justify-content: center;
     }
 
     button {
@@ -41,16 +51,16 @@
     }
 
     .card {
-        position: relative;
-        max-width: 300px;
-        max-height: 300px;
-        margin: 0 10px 20px 0;
-        border-radius: 5px;
-        border: 1px solid black;
-        overflow: hidden;
-        -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
-        -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
-        box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+        //position: relative;
+        //max-width: 300px;
+        //max-height: 300px;
+        //margin: 0 10px 20px 0;
+        //border-radius: 5px;
+        //border: 1px solid black;
+        //overflow: hidden;
+        //-webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+        //-moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+        //box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
     }
 
     .card-title {
