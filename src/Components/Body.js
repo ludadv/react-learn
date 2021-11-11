@@ -11,15 +11,15 @@ import Container from '@mui/material/Container';
 class Body extends React.Component {
     render() {
         return (
-            <Container>
-                <div className='body'>
+            <div className='body'>
+                <Container>
                     <Routes>
                         <Route path='/' element={<HomePage />} />
                         <Route path='/image-list' element={<ImageListPage />} />
                         <Route path='/contact' element={<ContactPage />} />
                     </Routes>
-                </div>
-            </Container>
+                </Container>
+            </div>
         );
     }
 }
