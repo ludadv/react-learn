@@ -23,7 +23,7 @@ class Header extends React.Component {
                                 <NavLink to="/contact" className="header-menu-item">Contact form</NavLink>
                             </MenuItem>
                             <MenuItem className="header__item">
-                                <NavLink to="/blog" className="header-menu-item">Blog</NavLink>
+                                <NavLink to="/axios-test" className="header-menu-item">Axios-test</NavLink>
                             </MenuItem>
                         </MenuList>
                     </Container>
