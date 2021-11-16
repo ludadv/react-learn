@@ -4,8 +4,14 @@ import List from '@mui/material/List';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
 
 class AxiosTest extends Component {
     state = {
@@ -17,8 +23,9 @@ class AxiosTest extends Component {
         },
         sort: {
             field: 'id',
-            orderDesc: false,
+            orderDesc: 'asc',
         },
+        search: '',
     }
 
     componentDidMount() {
@@ -58,17 +65,36 @@ class AxiosTest extends Component {
                     <InputLabel id="select-sort">Sort</InputLabel>
                     <Select
                         labelId="select-sort"
-                        value={this.state.sort.field}
                         label="Sort"
-                        // onChange={}
+                        value={this.state.sort.field}
+                        onChange={event => this.sortItems(event)}
                     >
-                        <MenuItem value={1}>Id</MenuItem>
-                        <MenuItem value={2}>Date</MenuItem>
-                        <MenuItem value={3}>Title</MenuItem>
-                        <MenuItem value={4}>User</MenuItem>
+                        <MenuItem value='id'>Id</MenuItem>
+                        <MenuItem value='created_at'>Date</MenuItem>
+                        <MenuItem value='title'>Title</MenuItem>
+                        <MenuItem value='user_id'>User</MenuItem>
                     </Select>
                 </FormControl>
+                    <FormControl>
+                        <Checkbox
+                            checked={this.state.sort.orderDesc === 'desc'}
+                            onChange={event => this.changeOrderDescCheckbox(event)}
+                            icon={<ArrowUpwardIcon />}
+                            checkedIcon={<ArrowDownwardIcon />}
+                        />
+                    </FormControl>
                 </Box>
+                <FormControl sx={{width: "100%"}}>
+                    <Box sx={{display: "flex", py: 2, justifyContent: "center"}}>
+                        <TextField
+                            // onChange={onTextChange}
+                            // value={}
+                            label={"Text Value"} //optional
+                        />
+                        <Button>Submit</Button>
+                    </Box>
+                </FormControl>
+
                 <div>page: { this.state.pagination.page }</div>
                 <div>perPage: { this.state.pagination.perPage }</div>
                 <div>pagesCount: { this.state.pagination.pagesCount }</div>
@@ -84,8 +110,8 @@ class AxiosTest extends Component {
         const params = new URLSearchParams();
         params.append('page', this.state.pagination.page);
         params.append('per_page', this.state.pagination.perPage);
-        params.append('orderBy', 'id');
-        params.append('sortedBy', 'desc'); // asc/desc
+        params.append('orderBy', this.state.sort.field);
+        params.append('sortedBy', this.state.sort.orderDesc);
         params.append('with', 'user');
         axios.get('http://laravel-blog-test/api/blog', {params})
             .then(response => {
@@ -109,22 +135,33 @@ class AxiosTest extends Component {
         return items;
     }
 
-    generateNumberPositions() {
-
-    }
-
     changePage(event) {
         let pageNo = +(event.target.value);
         this.state.pagination.page = pageNo;
 
-        this.getList()
+        this.getList();
     }
 
     changePerPage(event) {
         let numPositions = +(event.target.value);
         this.state.pagination.perPage = numPositions;
         this.state.pagination.page = 1;
-        this.getList()
+
+        this.getList();
+    }
+
+    sortItems(event) {
+        let item = event.target.value;
+        this.state.sort.field = item;
+
+        this.getList();
+    }
+
+    changeOrderDescCheckbox(event) {
+        let orderDesc = event.target.checked ? 'desc' : 'asc';
+        this.state.sort.orderDesc = orderDesc;
+
+        this.getList();
     }
 }
 
