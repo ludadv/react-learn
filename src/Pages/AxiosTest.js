@@ -85,13 +85,9 @@ class AxiosTest extends Component {
                     </FormControl>
                 </Box>
                 <FormControl sx={{width: "100%"}}>
-                    <Box sx={{display: "flex", py: 2, justifyContent: "center"}}>
-                        <TextField
-                            // onChange={onTextChange}
-                            // value={}
-                            label={"Text Value"} //optional
-                        />
-                        <Button>Submit</Button>
+                    <Box component="form" sx={{display: "flex", py: 2, justifyContent: "center"}}>
+                        <TextField label="Search" variant="outlined" onChange={event => this.handleChange(event)}/>
+                        <Button variant="outlined" onClick={() => this.handleSubmit()}>Отправить</Button>
                     </Box>
                 </FormControl>
 
@@ -112,7 +108,10 @@ class AxiosTest extends Component {
         params.append('per_page', this.state.pagination.perPage);
         params.append('orderBy', this.state.sort.field);
         params.append('sortedBy', this.state.sort.orderDesc);
-        params.append('with', 'user');
+        if (this.state.search) {
+            params.append('search', this.state.search);
+        }
+        // params.append('with', 'user');
         axios.get('http://laravel-blog-test/api/blog', {params})
             .then(response => {
                 this.setState({
@@ -163,6 +162,17 @@ class AxiosTest extends Component {
 
         this.getList();
     }
+
+    handleChange(event) {
+        let itemChange = event.target.value;
+        this.state.search = itemChange;
+    }
+
+    handleSubmit() {
+        this.getList();
+    }
+
+
 }
 
 export default AxiosTest;
