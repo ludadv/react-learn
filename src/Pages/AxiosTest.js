@@ -11,6 +11,11 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 class AxiosTest extends Component {
@@ -26,7 +31,27 @@ class AxiosTest extends Component {
             orderDesc: 'asc',
         },
         search: '',
+
+        style : {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 800,
+            bgcolor: 'white',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            buttonClose: {
+                position: 'absolute',
+                top: '5px',
+                right: '5px',
+            }
+        },
+        open: false,
     }
+
+
 
     componentDidMount() {
         this.getList();
@@ -86,8 +111,26 @@ class AxiosTest extends Component {
                 </Box>
                 <FormControl sx={{width: "100%"}}>
                     <Box component="form" sx={{display: "flex", py: 2, justifyContent: "center"}}>
-                        <TextField label="Search" variant="outlined" onChange={event => this.handleChange(event)}/>
-                        <Button variant="outlined" onClick={() => this.handleSubmit()}>Отправить</Button>
+                        <TextField
+                            value={this.state.search}
+                            label="Search"
+                            variant="outlined"
+                            onChange={event =>this.setState({search : event.target.value})}
+                        />
+                        <Button
+                            sx={{mx: 2}}
+                            variant="outlined"
+                            onClick={() => this.handleSubmit()}
+                        >
+                            Отправить
+                        </Button>
+                        <Button
+                            sx={{mx: 2}}
+                            variant="outlined"
+                            onClick={event => this.clearSearch(event)}
+                        >
+                            Очистить
+                        </Button>
                     </Box>
                 </FormControl>
 
@@ -96,8 +139,27 @@ class AxiosTest extends Component {
                 <div>pagesCount: { this.state.pagination.pagesCount }</div>
                 <hr />
                 { this.state.blogList.map(blogItem =>
-                    <div>{blogItem.id} - {blogItem.title}</div>
+                    <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}
+                        <IconButton color="primary" onClick={() =>this.openModal()} component="span">
+                            <RemoveRedEyeIcon />
+                        </IconButton>
+                    </div>
                 )}
+                <Modal
+                    open={this.state.open}
+                    onClose={() => this.closeModal()}
+                    aria-labelledby="modal-modal-title"
+                >
+                    <Box sx={this.state.style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+
+                        </Typography>
+                        <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                </Modal>
+
             </List>
         )
     }
@@ -110,8 +172,9 @@ class AxiosTest extends Component {
         params.append('sortedBy', this.state.sort.orderDesc);
         if (this.state.search) {
             params.append('search', this.state.search);
+            params.append('searchFields', 'title:like;text:like');
         }
-        // params.append('with', 'user');
+        params.append('with', 'user');
         axios.get('http://laravel-blog-test/api/blog', {params})
             .then(response => {
                 this.setState({
@@ -134,17 +197,27 @@ class AxiosTest extends Component {
         return items;
     }
 
-    changePage(event) {
+    async changePage(event) {
         let pageNo = +(event.target.value);
-        this.state.pagination.page = pageNo;
+
+        await this.setState({
+            pagination: {
+                page: pageNo,
+            },
+        });
 
         this.getList();
     }
 
-    changePerPage(event) {
+    async changePerPage(event) {
         let numPositions = +(event.target.value);
-        this.state.pagination.perPage = numPositions;
-        this.state.pagination.page = 1;
+
+        await this.setState({
+            pagination: {
+                perPage: numPositions,
+                page: 1,
+            },
+        });
 
         this.getList();
     }
@@ -163,13 +236,31 @@ class AxiosTest extends Component {
         this.getList();
     }
 
-    handleChange(event) {
-        let itemChange = event.target.value;
-        this.state.search = itemChange;
-    }
-
     handleSubmit() {
         this.getList();
+    }
+
+    async clearSearch(event) {
+        event.preventDefault();
+        await this.setState({
+            search : "",
+            page: 1,
+        });
+        this.getList();
+    }
+
+    async openModal() {
+        await this.setState({
+            open: true,
+        });
+
+        this.getList();
+    }
+
+    closeModal() {
+        this.setState({
+            open: false,
+        });
     }
 
 
