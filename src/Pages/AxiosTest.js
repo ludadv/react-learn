@@ -152,7 +152,7 @@ class AxiosTest extends Component {
                 >
                     <Box sx={this.state.style}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-
+                            Какой-то текст
                         </Typography>
                         <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
                             <CloseIcon />
