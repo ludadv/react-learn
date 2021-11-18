@@ -13,10 +13,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
-
+import Typography from "@mui/material/Typography";
 
 class AxiosTest extends Component {
     state = {
@@ -49,6 +48,7 @@ class AxiosTest extends Component {
             }
         },
         open: false,
+        text: '',
     }
 
 
@@ -140,7 +140,7 @@ class AxiosTest extends Component {
                 <hr />
                 { this.state.blogList.map(blogItem =>
                     <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}
-                        <IconButton color="primary" onClick={() =>this.openModal()} component="span">
+                        <IconButton color="primary" onClick={() =>this.openModal(blogItem)} component="span">
                             <RemoveRedEyeIcon />
                         </IconButton>
                     </div>
@@ -151,9 +151,7 @@ class AxiosTest extends Component {
                     aria-labelledby="modal-modal-title"
                 >
                     <Box sx={this.state.style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Какой-то текст
-                        </Typography>
+                        <Typography>{this.state.text}</Typography>
                         <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
                             <CloseIcon />
                         </IconButton>
@@ -249,12 +247,11 @@ class AxiosTest extends Component {
         this.getList();
     }
 
-    async openModal() {
-        await this.setState({
+    openModal(item) {
+        this.setState({
             open: true,
+            text: item.text,
         });
-
-        this.getList();
     }
 
     closeModal() {
