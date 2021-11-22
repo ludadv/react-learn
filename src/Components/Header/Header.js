@@ -25,6 +25,9 @@ class Header extends React.Component {
                             <MenuItem className="header__item">
                                 <NavLink to="/axios-test" className="header-menu-item">Axios-test</NavLink>
                             </MenuItem>
+                            <MenuItem className="header__item">
+                                <NavLink to="/page-test" className="header-menu-item">Page-test</NavLink>
+                            </MenuItem>
                         </MenuList>
                     </Container>
                 </Box>

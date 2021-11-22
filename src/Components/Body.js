@@ -7,6 +7,7 @@ import ContactPage from "../Pages/ContactPage";
 import ImageListPage from "../Pages/ImageListPage/ImageListPage";
 import AxiosTest from "../Pages/AxiosTest";
 import Container from '@mui/material/Container';
+import PageTest from "../Pages/PageTest";
 
 
 class Body extends React.Component {
@@ -19,6 +20,7 @@ class Body extends React.Component {
                         <Route path='/image-list' element={<ImageListPage />} />
                         <Route path='/contact' element={<ContactPage />} />
                         <Route path='/axios-test' element={<AxiosTest />} />
+                        <Route path='/page-test' element={<PageTest />} />
                     </Routes>
                 </Container>
             </div>
