@@ -1,46 +1,39 @@
 import React, {Component} from 'react';
-import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import {withStyles} from '@mui/styles';
-
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import styles from "../style";
+import PageTestForm from '../Components/PageTestForm';
 
 
 class PageTest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
-            setValue: '',
+            checked: false,
         }
     }
     render() {
         const { classes } = this.props;
         return (
-            <Box
-                sx={{
-                    '& > legend': { mt: 2 },
-                }}
-            >
-                <Typography component="legend">Controlled</Typography>
-                <Rating
-                    name="simple-controlled"
-                    value={this.state.value}
-                    onChange={(event) => this.setState({value: event.target.value})
-                    }
-                />
-                <Typography component="legend">Read only</Typography>
-                <Rating name="read-only" value={this.state.value} readOnly />
-                <Typography component="legend">Disabled</Typography>
-                <Rating name="disabled" value={this.state.value} disabled />
-                <Typography component="legend">No rating given</Typography>
-                <Rating name="no-value" value={null} />
-                <Button className={classes.button}>ClassComponent</Button>;
-            </Box>
+            <Box className={classes.container}>
+                <Typography>Имя:{this.props.ree}</Typography>
+                <Typography>Пол:м/ж</Typography>
+                <Typography>Семейное положение: женат/ не женат</Typography>
+                <FormControlLabel
+                    control={<Checkbox checked={this.state.checked}
+                    onChange={() => this.changeValue()}/>} label="Редактировать" />
+                {this.state.checked && <PageTestForm />}
 
+            </Box>
         );
+    }
+    changeValue() {
+            this.setState({
+                checked: !this.state.checked,
+        })
     }
 }
 
