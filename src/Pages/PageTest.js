@@ -29,7 +29,7 @@ class PageTest extends Component {
                 <Typography>Имя:{this.state.name}</Typography>
                 <Typography>Пол:{this.state.gender}</Typography>
                 <Typography>
-                    Семейное положение: {this.state.married ? <div>Женат/Замужем</div> : <div>Холост/Не замужем</div> }
+                    Семейное положение: {this.getMarriedText()}
                 </Typography>
                 <FormControlLabel
                     control={<Checkbox checked={this.state.checked}
@@ -73,8 +73,20 @@ class PageTest extends Component {
     changeCheck() {
         this.setState({
             married: !this.state.married,
-            status: 'Женат/Замужем'
         })
+    }
+
+    getMarriedText() {
+        let item = 'Женат/Замужем';
+        if (this.state.married && this.state.gender !== '') {
+            if (this.state.gender === 'Мужской') {
+                item = 'Женат';
+            } else {
+                item = 'Замужем';
+            }
+            return item;
+        }
+        return item;
     }
 
 }
