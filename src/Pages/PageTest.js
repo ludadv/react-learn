@@ -77,16 +77,26 @@ class PageTest extends Component {
     }
 
     getMarriedText() {
-        let item = 'Женат/Замужем';
-        if (this.state.married && this.state.gender !== '') {
-            if (this.state.gender === 'Мужской') {
-                item = 'Женат';
-            } else {
-                item = 'Замужем';
+        if (this.state.married) {
+            if (this.state.gender === '') {
+                return 'Женат/Замужем';
             }
-            return item;
+            if (this.state.gender === 'Мужской') {
+                return  'Женат';
+            } else {
+                return  'Замужем';
+            }
+        } else {
+            if (this.state.gender === '') {
+                return 'Холост/Не замужем';
+            }
+            if (this.state.gender === 'Мужской') {
+                return  'Холост';
+            } else {
+                return  'Не замужем';
+            }
         }
-        return item;
+
     }
 
 }
