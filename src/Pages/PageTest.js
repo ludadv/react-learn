@@ -6,10 +6,12 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import styles from "../style";
 import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import 'date-fns'
+import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns';
 
 
 class PageTest extends Component {
@@ -20,6 +22,8 @@ class PageTest extends Component {
             name: '',
             gender: '',
             married: false,
+            selectedDataBirth: new Date('2021-11-29'),
+            selectedDataWedding: new Date('2021-11-29'),
         }
     }
     render() {
@@ -31,36 +35,60 @@ class PageTest extends Component {
                 <Typography>
                     Семейное положение: {this.getMarriedText()}
                 </Typography>
+                <Typography>Дата рождения: {this.state.selectedDataBirth.toLocaleDateString()}</Typography>
+                <Typography>Дата свадьбы: {this.state.selectedDataWedding.toLocaleDateString()}</Typography>
                 <FormControlLabel
                     control={<Checkbox checked={this.state.checked}
                     onChange={() => this.changeValue()}/>} label="Редактировать" />
                 {this.state.checked &&
                 <Box sx={{margin: '0 auto',  border: '1px solid #000'}}>
                     <FormControl component="fieldset" variant="standard">
-                        <FormGroup sx={{display: 'flex'}}>
-                            <TextField label="Имя"
-                                       variant="outlined"
-                                       value={this.state.name}
-                                       onChange={event => this.setState({name: event.target.value})}
-                                       sx={{ m: 1, minWidth: 120 }}/>
-                            <Select
-                                value={this.state.gender}
-                                label='Select'
-                                variant="outlined"
-                                onChange={event => this.setState({gender: event.target.value})}
-                            >
-                                <MenuItem value='Мужской'>Мужской</MenuItem>
-                                <MenuItem value='Женский'>Женский</MenuItem>
-                            </Select>
-                            <FormControlLabel
-                                control={<Checkbox checked={this.state.married} onChange={() =>this.changeCheck()}/>}
-                                label='Женат/Замужем' />
-
-
-                        </FormGroup>
+                        <TextField label="Имя"
+                                   sx={{m: 1,minWidth: 120 }}
+                                   variant="outlined"
+                                   value={this.state.name}
+                                   onChange={event => this.setState({name: event.target.value})}
+                        />
+                        <Select
+                            sx={{m: 1, minWidth: 120 }}
+                            value={this.state.gender}
+                            label='Select'
+                            variant="outlined"
+                            onChange={event => this.setState({gender: event.target.value})}
+                        >
+                            <MenuItem value='Мужской'>Мужской</MenuItem>
+                            <MenuItem value='Женский'>Женский</MenuItem>
+                        </Select>
+                        <FormControlLabel
+                            control={<Checkbox checked={this.state.married} onChange={() =>this.changeCheck()}/>}
+                            label='Женат/Замужем' />
                     </FormControl>
-                </Box>}
-
+                    {this.state.married &&
+                    <Box  className={classes.calendarBox}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                            <DatePicker
+                                sx={{marginRight: 2}}
+                                label="date of birth"
+                                value={this.state.selectedDataBirth}
+                                onChange={dataB => this.setState({
+                                    selectedDataBirth: new Date(dataB),
+                                })}
+                            />
+                        </MuiPickersUtilsProvider>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <DatePicker
+                                label="wedding date"
+                                value={this.state.selectedDataWedding}
+                                minDate={this.state.selectedDataBirth}
+                                onChange={dataW => this.setState({
+                                    selectedDataWedding: new Date(dataW),
+                                })}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Box>
+                    }
+                </Box>
+                }
             </Box>
         );
     }
@@ -80,25 +108,26 @@ class PageTest extends Component {
         if (this.state.married) {
             if (this.state.gender === '') {
                 return 'Женат/Замужем';
-            }
-            if (this.state.gender === 'Мужской') {
+            } else if (this.state.gender === 'Мужской') {
                 return  'Женат';
             } else {
                 return  'Замужем';
             }
-        } else {
-            if (this.state.gender === '') {
-                return 'Холост/Не замужем';
-            }
-            if (this.state.gender === 'Мужской') {
-                return  'Холост';
-            } else {
-                return  'Не замужем';
-            }
         }
 
+        if (this.state.gender === '') {
+            return 'Холост/Не замужем';
+        } else if (this.state.gender === 'Мужской') {
+            return  'Холост';
+        } else {
+            return  'Не замужем';
+        }
     }
 
+    // getСhosenDate(dataB) {
+    //     this.setState({
+    //         selectedDataBirth: new Date(dataB),
+    //     })
+    // }
 }
-
 export default withStyles(styles)(PageTest);
