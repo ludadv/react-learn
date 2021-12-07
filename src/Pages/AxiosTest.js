@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import axios from "axios";
 import List from '@mui/material/List';
 import MenuItem from '@mui/material/MenuItem';
@@ -17,7 +17,7 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
 
-class AxiosTest extends Component {
+class AxiosTest extends React.Component {
     state = {
         blogList: [],
         pagination: {
