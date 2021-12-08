@@ -12,10 +12,11 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
+import {DataGrid} from '@mui/x-data-grid';
+
 
 class AxiosTest extends React.Component {
     state = {
@@ -139,11 +140,18 @@ class AxiosTest extends React.Component {
                 <div>pagesCount: { this.state.pagination.pagesCount }</div>
                 <hr />
                 { this.state.blogList.map(blogItem =>
-                    <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}
-                        <IconButton color="primary" onClick={() =>this.openModal(blogItem)} component="span">
-                            <RemoveRedEyeIcon />
-                        </IconButton>
-                    </div>
+                        <DataGrid
+                            rows={blogItem}
+                            // columns={columns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            checkboxSelection
+                        />
+                    // <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}
+                    //     <IconButton color="primary" onClick={() =>this.openModal(blogItem)} component="span">
+                    //         <RemoveRedEyeIcon />
+                    //     </IconButton>
+                    // </div>
                 )}
                 <Modal
                     open={this.state.open}
