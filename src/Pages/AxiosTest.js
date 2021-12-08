@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
-import {DataGrid} from '@mui/x-data-grid';
+import {DataGrid} from "@mui/x-data-grid";
 
 
 class AxiosTest extends React.Component {
@@ -52,13 +52,28 @@ class AxiosTest extends React.Component {
         text: '',
     }
 
-
-
     componentDidMount() {
         this.getList();
     }
 
     render() {
+        const columns = [
+            { field: 'id', headerName: 'ID', width: 90 },
+            {
+                field: 'title',
+                headerName: 'title',
+                width: 150,
+                editable: true,
+            },
+            {
+                field: 'text',
+                headerName: 'text',
+                type: 'number',
+                width: 200,
+                editable: true,
+            },
+            ]
+
         return (
             <List>
                 <Box sx={{ display: 'flex', justifyContent: "space-between", width: '100%'}}>
@@ -139,32 +154,37 @@ class AxiosTest extends React.Component {
                 <div>perPage: { this.state.pagination.perPage }</div>
                 <div>pagesCount: { this.state.pagination.pagesCount }</div>
                 <hr />
-                { this.state.blogList.map(blogItem =>
-                        <DataGrid
-                            rows={blogItem}
-                            // columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                            checkboxSelection
-                        />
-                    // <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}
-                    //     <IconButton color="primary" onClick={() =>this.openModal(blogItem)} component="span">
-                    //         <RemoveRedEyeIcon />
-                    //     </IconButton>
-                    // </div>
-                )}
-                <Modal
-                    open={this.state.open}
-                    onClose={() => this.closeModal()}
-                    aria-labelledby="modal-modal-title"
-                >
-                    <Box sx={this.state.style}>
-                        <Typography>{this.state.text}</Typography>
-                        <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                </Modal>
+
+                {/*{ this.state.blogList.map(blogItem =>*/}
+                {/*    <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}*/}
+                {/*        <IconButton color="primary" onClick={() =>this.openModal(blogItem)} component="span">*/}
+                {/*            <RemoveRedEyeIcon />*/}
+                {/*        </IconButton>*/}
+                {/*    </div>*/}
+                {/*)}*/}
+                <Box sx={{width: '100%', height: '500px'}}>
+                    <DataGrid
+                        rows={this.state.blogList}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                        disableSelectionOnClick
+                    />
+
+                    <Modal
+                        open={this.state.open}
+                        onClose={() => this.closeModal()}
+                        aria-labelledby="modal-modal-title"
+                    >
+                        <Box sx={this.state.style}>
+                            <Typography>{this.state.text}</Typography>
+                            <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
+                                <CloseIcon />
+                            </IconButton>
+                        </Box>
+                    </Modal>
+                </Box>
 
             </List>
         )
@@ -183,6 +203,7 @@ class AxiosTest extends React.Component {
         params.append('with', 'user');
         axios.get('http://laravel-blog-test/api/blog', {params})
             .then(response => {
+                console.log(response)
                 this.setState({
                     blogList: response.data.data,
                     pagination: {
