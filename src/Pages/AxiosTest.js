@@ -15,41 +15,52 @@ import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid} from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
 
+import LogInForm from '../Components/LogInForm'
 
 class AxiosTest extends React.Component {
-    state = {
-        blogList: [],
-        pagination: {
-            page: 1,
-            perPage: 10,
-            pagesCount: 0,
-        },
-        sort: {
-            field: 'id',
-            orderDesc: 'asc',
-        },
-        search: '',
+    constructor(props) {
+        super(props);
+        this.state = {
+            blogList: [],
+            pagination: {
+                page: 1,
+                perPage: 10,
+                pagesCount: 0,
+            },
+            sort: {
+                field: 'id',
+                orderDesc: 'asc',
+            },
+            search: '',
+            openModal: false,
 
-        style : {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 800,
-            bgcolor: 'white',
-            border: '2px solid #000',
-            boxShadow: 24,
-            p: 4,
-            buttonClose: {
+            style : {
                 position: 'absolute',
-                top: '5px',
-                right: '5px',
-            }
-        },
-        open: false,
-        text: '',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 800,
+                bgcolor: 'white',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+                buttonClose: {
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                }
+            },
+            open: false,
+            text: '',
+            user: {
+                user_id: null,
+                title: '',
+                text: ''
+            },
+        }
     }
 
     componentDidMount() {
@@ -58,21 +69,16 @@ class AxiosTest extends React.Component {
 
     render() {
         const columns = [
-            { field: 'id', headerName: 'ID', width: 90 },
+            { field: 'id', headerName: 'ID', width: 70 },
             {
-                field: 'title',
-                headerName: 'title',
-                width: 150,
-                editable: true,
-            },
-            {
-                field: 'text',
-                headerName: 'text',
-                type: 'number',
+                field: 'user',
+                headerName: 'UserName',
+                valueFormatter: (data) => data.value.name,
                 width: 200,
-                editable: true,
             },
-            ]
+            { field: 'title', headerName: 'Title', width: 130 },
+            { field: 'text', headerName: 'Text', width: 130 },
+        ];
 
         return (
             <List>
@@ -162,16 +168,19 @@ class AxiosTest extends React.Component {
                 {/*        </IconButton>*/}
                 {/*    </div>*/}
                 {/*)}*/}
+                <LogInForm open={this.state.openModal}
+                           funcClose={() => this.setState({
+                                openModal: false,
+                            })}
+                           handleSubmit={this.handleSubmit}
+                />
+
                 <Box sx={{width: '100%', height: '500px'}}>
                     <DataGrid
                         rows={this.state.blogList}
                         columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                        disableSelectionOnClick
+                        rowsPerPageOptions={[this.state.pagination.perPage]}
                     />
-
                     <Modal
                         open={this.state.open}
                         onClose={() => this.closeModal()}
@@ -185,7 +194,11 @@ class AxiosTest extends React.Component {
                         </Box>
                     </Modal>
                 </Box>
-
+                <IconButton onClick={() =>this.setState({
+                    openModal: true,
+                })} component="span">
+                    <AddIcon />
+                </IconButton>
             </List>
         )
     }
@@ -213,6 +226,24 @@ class AxiosTest extends React.Component {
                     },
                 });
             });
+    }
+
+    handleSubmit = (submitForm) => {
+        this.setState({
+            user: {
+                user_id: submitForm.id,
+                title: submitForm.title,
+                text: submitForm.text,
+            },
+        })
+        this.addToList(this.state.user);
+    };
+
+    addToList(newItem) {
+        axios.post('http://laravel-blog-test/api/blog', newItem)
+            .then(() => {
+                this.getList();
+            })
     }
 
     generatePageNumbers() {

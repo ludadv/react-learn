@@ -5,10 +5,6 @@ import Container from "@mui/material/Container";
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import IconButton from '@mui/material/IconButton';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import Tooltip from '@mui/material/Tooltip';
-import LogInForm from "../LogInForm";
 
 class Header extends React.Component {
     constructor(props) {
@@ -48,20 +44,6 @@ class Header extends React.Component {
                                     </NavLink>
                                 </MenuItem>
                             </MenuList>
-                            <Box sx={{ justifyContent: 'flex-end' }}>
-                                <Tooltip title="Регистрация">
-                                    <IconButton aria-label="register"
-                                                color='default'
-                                                onClick={() => this.setState({
-                                                    open: true,
-                                                })}>
-                                        <AppRegistrationIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                <LogInForm open={this.state.open} funcClose={() => this.setState({
-                                    open: false,
-                                })}/>
-                            </Box>
                         </Box>
                     </Container>
                 </Box>
