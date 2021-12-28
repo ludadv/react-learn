@@ -15,8 +15,16 @@ import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
-import {DataGrid} from '@mui/x-data-grid';
+// import {DataGrid} from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 
 import LogInForm from '../Components/LogInForm'
 
@@ -68,17 +76,17 @@ class AxiosTest extends React.Component {
     }
 
     render() {
-        const columns = [
-            { field: 'id', headerName: 'ID', width: 70 },
-            {
-                field: 'user',
-                headerName: 'UserName',
-                valueFormatter: (data) => data.value.name,
-                width: 200,
-            },
-            { field: 'title', headerName: 'Title', width: 130 },
-            { field: 'text', headerName: 'Text', width: 130 },
-        ];
+        // const columns = [
+        //     { field: 'id', headerName: 'ID', width: 70 },
+        //     {
+        //         field: 'user',
+        //         headerName: 'UserName',
+        //         valueFormatter: (data) => data.value.name,
+        //         width: 200,
+        //     },
+        //     { field: 'title', headerName: 'Title', width: 130 },
+        //     { field: 'text', headerName: 'Text', width: 130 },
+        // ];
 
         return (
             <List>
@@ -175,12 +183,41 @@ class AxiosTest extends React.Component {
                            handleSubmit={this.handleSubmit}
                 />
 
-                <Box sx={{width: '100%', height: '500px'}}>
-                    <DataGrid
-                        rows={this.state.blogList}
-                        columns={columns}
-                        rowsPerPageOptions={[this.state.pagination.perPage]}
-                    />
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell align="right">Title</TableCell>
+                                <TableCell align="right">Text</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.blogList.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {row.id}
+                                    </TableCell>
+                                    <TableCell align="right">{row.title}</TableCell>
+                                    <TableCell align="right">{row.text}</TableCell>
+                                    <TableCell align="right" onClick={() => this.removeItemFromList(row.id)}>
+                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                    {/*<DataGrid*/}
+                    {/*    rows={this.state.blogList}*/}
+                    {/*    columns={columns}*/}
+                    {/*    rowsPerPageOptions={[this.state.pagination.perPage]}*/}
+                    {/*/>*/}
                     <Modal
                         open={this.state.open}
                         onClose={() => this.closeModal()}
@@ -193,7 +230,6 @@ class AxiosTest extends React.Component {
                             </IconButton>
                         </Box>
                     </Modal>
-                </Box>
                 <IconButton onClick={() =>this.setState({
                     openModal: true,
                 })} component="span">
@@ -241,6 +277,14 @@ class AxiosTest extends React.Component {
 
     addToList(newItem) {
         axios.post('http://laravel-blog-test/api/blog', newItem)
+            .then(() => {
+                this.getList();
+            })
+    }
+
+    removeItemFromList(item) {
+        let removedItem = item;
+        axios.delete(`http://laravel-blog-test/api/blog/${removedItem}`)
             .then(() => {
                 this.getList();
             })
