@@ -15,7 +15,6 @@ import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
-// import {DataGrid} from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,7 +22,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 
 import LogInForm from '../Components/LogInForm'
@@ -37,6 +39,7 @@ class AxiosTest extends React.Component {
                 page: 1,
                 perPage: 10,
                 pagesCount: 0,
+                itemsCount: 0,
             },
             sort: {
                 field: 'id',
@@ -44,6 +47,7 @@ class AxiosTest extends React.Component {
             },
             search: '',
             openModal: false,
+            pages: 0,
 
             style : {
                 position: 'absolute',
@@ -76,46 +80,34 @@ class AxiosTest extends React.Component {
     }
 
     render() {
-        // const columns = [
-        //     { field: 'id', headerName: 'ID', width: 70 },
-        //     {
-        //         field: 'user',
-        //         headerName: 'UserName',
-        //         valueFormatter: (data) => data.value.name,
-        //         width: 200,
-        //     },
-        //     { field: 'title', headerName: 'Title', width: 130 },
-        //     { field: 'text', headerName: 'Text', width: 130 },
-        // ];
-
         return (
             <List>
                 <Box sx={{ display: 'flex', justifyContent: "space-between", width: '100%'}}>
                     <FormControl sx={{ minWidth: 150 }}>
                         <InputLabel id="select-page">Page</InputLabel>
-                        <Select
-                            value={this.state.pagination.page}
-                            labelId="select-page"
-                            label="Page"
-                            onChange={event => this.changePage(event)}
-                        >
-                            { this.generatePageNumbers().map(pageNo =>
-                                <MenuItem value={pageNo}>{pageNo}</MenuItem>) }
-                        </Select>
+                        {/*<Select*/}
+                        {/*    value={this.state.pagination.page}*/}
+                        {/*    labelId="select-page"*/}
+                        {/*    label="Page"*/}
+                        {/*    onChange={event => this.changePage(event)}*/}
+                        {/*>*/}
+                        {/*    { this.generatePageNumbers().map(pageNo =>*/}
+                        {/*        <MenuItem value={pageNo}>{pageNo}</MenuItem>) }*/}
+                        {/*</Select>*/}
                     </FormControl>
-                    <FormControl sx={{ minWidth: 150 }}>
-                        <InputLabel id="select-per-page">PerPage</InputLabel>
-                        <Select
-                            labelId="select-per-page"
-                            value={this.state.pagination.perPage}
-                            label="PerPage"
-                            onChange={event => this.changePerPage(event)}
-                        >
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={25}>25</MenuItem>
-                            <MenuItem value={50}>50</MenuItem>
-                        </Select>
-                    </FormControl>
+                    {/*<FormControl sx={{ minWidth: 150 }}>*/}
+                    {/*    <InputLabel id="select-per-page">PerPage</InputLabel>*/}
+                    {/*    <Select*/}
+                    {/*        labelId="select-per-page"*/}
+                    {/*        value={this.state.pagination.perPage}*/}
+                    {/*        label="PerPage"*/}
+                    {/*        onChange={event => this.changePerPage(event)}*/}
+                    {/*    >*/}
+                    {/*        <MenuItem value={10}>10</MenuItem>*/}
+                    {/*        <MenuItem value={25}>25</MenuItem>*/}
+                    {/*        <MenuItem value={50}>50</MenuItem>*/}
+                    {/*    </Select>*/}
+                    {/*</FormControl>*/}
                     <FormControl sx={{ minWidth: 300 }}>
                     <InputLabel id="select-sort">Sort</InputLabel>
                     <Select
@@ -164,10 +156,10 @@ class AxiosTest extends React.Component {
                     </Box>
                 </FormControl>
 
-                <div>page: { this.state.pagination.page }</div>
-                <div>perPage: { this.state.pagination.perPage }</div>
-                <div>pagesCount: { this.state.pagination.pagesCount }</div>
-                <hr />
+                {/*<div>page: { this.state.pagination.page }</div>*/}
+                {/*<div>perPage: { this.state.pagination.perPage }</div>*/}
+                {/*<div>pagesCount: { this.state.pagination.pagesCount }</div>*/}
+                {/*<hr />*/}
 
                 {/*{ this.state.blogList.map(blogItem =>*/}
                 {/*    <div>{blogItem.id} - {blogItem.title} - {blogItem.user.name}*/}
@@ -213,23 +205,34 @@ class AxiosTest extends React.Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                    {/*<DataGrid*/}
-                    {/*    rows={this.state.blogList}*/}
-                    {/*    columns={columns}*/}
-                    {/*    rowsPerPageOptions={[this.state.pagination.perPage]}*/}
-                    {/*/>*/}
-                    <Modal
-                        open={this.state.open}
-                        onClose={() => this.closeModal()}
-                        aria-labelledby="modal-modal-title"
-                    >
-                        <Box sx={this.state.style}>
-                            <Typography>{this.state.text}</Typography>
-                            <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
-                                <CloseIcon />
-                            </IconButton>
-                        </Box>
-                    </Modal>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 50]}
+                    component="div"
+                    count={this.state.pagination.itemsCount}
+                    rowsPerPage={this.state.pagination.perPage}
+                    page={this.state.pages}
+                    onRowsPerPageChange={event => this.changePerPage(event)}
+                />
+                <Stack spacing={2}>
+                    <Pagination count={this.state.pagination.pagesCount}
+                                color="primary"
+                                page={this.state.pagination.page}
+                                defaultPage={3}
+                                onChange={(event, value) => this.changePage(event, value)}
+                    />
+                </Stack>
+                <Modal
+                    open={this.state.open}
+                    onClose={() => this.closeModal()}
+                    aria-labelledby="modal-modal-title"
+                >
+                    <Box sx={this.state.style}>
+                        <Typography>{this.state.text}</Typography>
+                        <IconButton sx={this.state.style.buttonClose} onClick={() =>this.closeModal()} component="span">
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                </Modal>
                 <IconButton onClick={() =>this.setState({
                     openModal: true,
                 })} component="span">
@@ -259,6 +262,7 @@ class AxiosTest extends React.Component {
                         page: response.data.meta.pagination.current_page,
                         perPage: response.data.meta.pagination.per_page,
                         pagesCount: response.data.meta.pagination.total_pages,
+                        itemsCount: response.data.meta.pagination.total,
                     },
                 });
             });
@@ -299,12 +303,11 @@ class AxiosTest extends React.Component {
         return items;
     }
 
-    async changePage(event) {
-        let pageNo = +(event.target.value);
-
+    async changePage(event, value) {
         await this.setState({
             pagination: {
-                page: pageNo,
+                page: value,
+                perPage: 10,
             },
         });
 
