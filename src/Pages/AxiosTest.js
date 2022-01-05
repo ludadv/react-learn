@@ -26,6 +26,8 @@ import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 
 import LogInForm from '../Components/LogInForm'
@@ -73,6 +75,9 @@ class AxiosTest extends React.Component {
                 text: ''
             },
         }
+
+
+
     }
 
     componentDidMount() {
@@ -195,7 +200,7 @@ class AxiosTest extends React.Component {
                                     </TableCell>
                                     <TableCell align="right">{row.title}</TableCell>
                                     <TableCell align="right">{row.text}</TableCell>
-                                    <TableCell align="right" onClick={() => this.removeItemFromList(row.id)}>
+                                    <TableCell align="right" onClick={() => this.confirmItemDelete(row.id)}>
                                         <IconButton color="primary" aria-label="upload picture" component="span">
                                             <CloseIcon />
                                         </IconButton>
@@ -286,6 +291,24 @@ class AxiosTest extends React.Component {
             })
     }
 
+    confirmItemDelete(item) {
+        const MySwal = withReactContent(Swal)
+        MySwal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                MySwal.fire(
+                    this.removeItemFromList(item)
+                )
+            }
+        })
+    }
     removeItemFromList(item) {
         let removedItem = item;
         axios.delete(`http://laravel-blog-test/api/blog/${removedItem}`)
