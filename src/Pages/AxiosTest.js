@@ -16,6 +16,7 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography";
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -49,6 +50,7 @@ class AxiosTest extends React.Component {
             },
             search: '',
             openModal: false,
+            modalData: {},
             pages: 0,
 
             style : {
@@ -74,10 +76,8 @@ class AxiosTest extends React.Component {
                 title: '',
                 text: ''
             },
+            status: false,
         }
-
-
-
     }
 
     componentDidMount() {
@@ -147,7 +147,7 @@ class AxiosTest extends React.Component {
                         <Button
                             sx={{mx: 2}}
                             variant="outlined"
-                            onClick={() => this.handleSubmit()}
+                            onClick={() => this.handleSearchSubmit()}
                         >
                             Отправить
                         </Button>
@@ -178,6 +178,7 @@ class AxiosTest extends React.Component {
                                 openModal: false,
                             })}
                            handleSubmit={this.handleSubmit}
+                           btn = 'Add'
                 />
 
                 <TableContainer component={Paper}>
@@ -187,6 +188,15 @@ class AxiosTest extends React.Component {
                                 <TableCell>ID</TableCell>
                                 <TableCell align="right">Title</TableCell>
                                 <TableCell align="right">Text</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell align="right">
+                                    <IconButton onClick={() =>this.setState({
+                                        openModal: true,
+                                        status: true,
+                                    })} component="span">
+                                        <AddIcon />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -200,11 +210,42 @@ class AxiosTest extends React.Component {
                                     </TableCell>
                                     <TableCell align="right">{row.title}</TableCell>
                                     <TableCell align="right">{row.text}</TableCell>
-                                    <TableCell align="right" onClick={() => this.confirmItemDelete(row.id)}>
-                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                    <TableCell align="right">
+                                        <IconButton
+                                            onClick={() => this.setState({
+                                                openModal: true,
+                                                // status: false,
+                                                modalData: {
+                                                    user_id: row.id,
+                                                    title: row.title,
+                                                    text: row.text
+                                                },
+                                            })}
+                                            color="primary"
+                                            aria-label="upload picture"
+                                            component="span">
+                                            <EditIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <IconButton
+                                            onClick={() => this.confirmItemDelete(row.id)}
+                                            color="primary"
+                                            aria-label="upload picture"
+                                            component="span">
                                             <CloseIcon />
                                         </IconButton>
                                     </TableCell>
+                                    <LogInForm
+                                        open={this.state.openModal}
+                                        data={this.state.modalData}
+                                        funcClose={() => this.setState({
+                                           openModal: false,
+                                        })}
+                                        handleSubmit={this.handleSubmit}
+                                        title={this.state.status?'Добавить':'Редактировать'}
+                                        btn={this.state.status?'Add':'Edit'}
+                                    />
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -238,11 +279,6 @@ class AxiosTest extends React.Component {
                         </IconButton>
                     </Box>
                 </Modal>
-                <IconButton onClick={() =>this.setState({
-                    openModal: true,
-                })} component="span">
-                    <AddIcon />
-                </IconButton>
             </List>
         )
     }
@@ -276,13 +312,24 @@ class AxiosTest extends React.Component {
     handleSubmit = (submitForm) => {
         this.setState({
             user: {
-                user_id: submitForm.id,
+                user_id: submitForm.user_id,
                 title: submitForm.title,
                 text: submitForm.text,
             },
         })
+        // console.log(this.state.user.user_id)
+        // if (this.state.user.user_id) {
+        //     this.editItems(this.state.user)
+        // }
         this.addToList(this.state.user);
     };
+
+    // editItems(editableItem) {
+    //     axios.patch('http://laravel-blog-test/api/blog', editableItem)
+    //         .then(() => {
+    //             this.getList();
+    //         })
+    // }
 
     addToList(newItem) {
         axios.post('http://laravel-blog-test/api/blog', newItem)
@@ -364,7 +411,7 @@ class AxiosTest extends React.Component {
         this.getList();
     }
 
-    handleSubmit() {
+    handleSearchSubmit() {
         this.getList();
     }
 
@@ -380,6 +427,7 @@ class AxiosTest extends React.Component {
     openModal(item) {
         this.setState({
             open: true,
+            data: true,
             text: item.text,
         });
     }
