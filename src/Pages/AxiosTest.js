@@ -76,6 +76,7 @@ class AxiosTest extends React.Component {
                 title: '',
                 text: ''
             },
+            userId: '',
             status: false,
         }
     }
@@ -193,6 +194,8 @@ class AxiosTest extends React.Component {
                                     <IconButton onClick={() =>this.setState({
                                         openModal: true,
                                         status: true,
+                                        modalData: {},
+                                        userId: '',
                                     })} component="span">
                                         <AddIcon />
                                     </IconButton>
@@ -214,9 +217,10 @@ class AxiosTest extends React.Component {
                                         <IconButton
                                             onClick={() => this.setState({
                                                 openModal: true,
-                                                // status: false,
+                                                status: false,
+                                                userId: row.id,
                                                 modalData: {
-                                                    user_id: row.id,
+                                                    user_id: row.user_id,
                                                     title: row.title,
                                                     text: row.text
                                                 },
@@ -317,19 +321,19 @@ class AxiosTest extends React.Component {
                 text: submitForm.text,
             },
         })
-        // console.log(this.state.user.user_id)
-        // if (this.state.user.user_id) {
-        //     this.editItems(this.state.user)
-        // }
-        this.addToList(this.state.user);
+        if (this.state.userId) {
+            this.editItems(this.state.user)
+        } else {
+            this.addToList(this.state.user);
+        }
     };
 
-    // editItems(editableItem) {
-    //     axios.patch('http://laravel-blog-test/api/blog', editableItem)
-    //         .then(() => {
-    //             this.getList();
-    //         })
-    // }
+    editItems(editableItem) {
+        axios.patch(`http://laravel-blog-test/api/blog/${this.state.userId}`, editableItem)
+            .then(() => {
+                this.getList();
+            })
+    }
 
     addToList(newItem) {
         axios.post('http://laravel-blog-test/api/blog', newItem)
